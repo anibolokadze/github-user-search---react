@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import "./App.css";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import Search from "./components/Search";
+import UserData from "./components/SearchResult";
+import Title from "./components/Title";
 function App() {
+  const [user, setuser] = useState("");
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    axios.get(`https://api.github.com/users/octocat`).then((res) => {
+      setData(res.data);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Title />
+      <Search user={user} setuser={setuser} setData={setData} />
+      <UserData data={data} />
+    </>
   );
 }
 
